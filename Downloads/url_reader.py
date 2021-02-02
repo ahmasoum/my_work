@@ -18,48 +18,52 @@ ap.add_argument("-o", "--output", required=True,
 	help="path to output directory of images")
 ap.add_argument("-n", "--numbers", required=True,
 	help="numbers of image you want")
+ap.add_argument("-t", "--tumor", required=True,
+	help="numbers of image you want")	
 args = vars(ap.parse_args())
 # grab the list of URLs from the input file, then initialize the
 # total number of images downloaded thus far
 rows = open(args["urls"]).read().strip().split("\n")
 total = 1
-print("ttttt", total)
+
+BOLD = '>>>'
+print('>>>>>>>>>>>>>>>>>>>>>>>>>')
 for url in rows:
 	try:
-		
-		if url[-3:]=='png':
-			r = requests.get(url, timeout=60)
-			p2 = os.path.sep.join([args["output"], "{}.png".format(str(total).zfill(8))])
-			f2=open(p2,"wb")
-			f2.write(r.content)
-			f2.close()
-			ptxt = os.path.sep.join([args["output"], "{}.txt".format(str(total).zfill(8))])
-			ff =open(ptxt,'w') 
-			ff.write(url)
-			ff.close()
-			print("[INFO] downloaded: {}".format(p2))
-		elif url[-3:]=='jpg':
-			r = requests.get(url, timeout=60)
-			p = os.path.sep.join([args["output"], "{}.jpg".format(str(total).zfill(8))])
-			f = open(p, "wb")
-			f.write(r.content)
-			f.close()
-			ptxt = os.path.sep.join([args["output"], "{}.txt".format(str(total).zfill(8))])
-			ff =open(ptxt,'w') 
-			ff.write(url)
-			ff.close()
-			print("[INFO] downloaded: {}".format(p))
-		elif url[-4:]=='jpeg':
-			r = requests.get(url, timeout=60)
-			p3 = os.path.sep.join([args["output"], "{}.jpeg".format(str(total).zfill(8))])
-			f3 = open(p3, "wb")
-			f3.write(r.content)
-			f3.close()
-			ptxt = os.path.sep.join([args["output"], "{}.txt".format(str(total).zfill(8))])
-			ff =open(ptxt,'w') 
-			ff.write(url)
-			ff.close()
-			print("[INFO] downloaded: {}".format(p3))			
+		if args["tumor"] in url.lower():
+			if '.png' in url:
+				r = requests.get(url, timeout=60)
+				p2 = os.path.sep.join([args["output"], "{}.png".format(str(total).zfill(8))])
+				f2=open(p2,"wb")
+				f2.write(r.content)
+				f2.close()
+				ptxt = os.path.sep.join([args["output"], "{}.txt".format(str(total).zfill(8))])
+				ff =open(ptxt,'w') 
+				ff.write(url +'\n'+ BOLD +args["tumor"])
+				ff.close()
+				print("[INFO] downloaded: {}".format(p2))
+			elif '.jpg' in url:
+				r = requests.get(url, timeout=60)
+				p = os.path.sep.join([args["output"], "{}.jpg".format(str(total).zfill(8))])
+				f = open(p, "wb")
+				f.write(r.content)
+				f.close()
+				ptxt = os.path.sep.join([args["output"], "{}.txt".format(str(total).zfill(8))])
+				ff =open(ptxt,'w') 
+				ff.write(url +'\n' + BOLD + args["tumor"])
+				ff.close()
+				print("[INFO] downloaded: {}".format(p))
+			elif '.jpeg' in url:
+				r = requests.get(url, timeout=60)
+				p3 = os.path.sep.join([args["output"], "{}.jpeg".format(str(total).zfill(8))])
+				f3 = open(p3, "wb")
+				f3.write(r.content)
+				f3.close()
+				ptxt = os.path.sep.join([args["output"], "{}.txt".format(str(total).zfill(8))])
+				ff =open(ptxt,'w') 
+				ff.write(url +'\n'+ BOLD +args["tumor"] )
+				ff.close()
+				print("[INFO] downloaded: {}".format(p3))			
 		# update the counter
 		total += 1
 		if total == int(args["numbers"])+1:
